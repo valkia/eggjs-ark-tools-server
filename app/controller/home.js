@@ -1,9 +1,9 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-var AipOcrClient = require("baidu-aip-sdk").ocr;
-var HttpClient = require("baidu-aip-sdk").HttpClient;
-
+let AipOcrClient = require("baidu-aip-sdk").ocr;
+let HttpClient = require("baidu-aip-sdk").HttpClient;
+let Resp = require('../model/Resp.js');
 class HomeController extends Controller {
   async index() {
     const { ctx } = this;
@@ -50,11 +50,13 @@ class HomeController extends Controller {
           resultStr.push(item.words);
         }
       })
+      console.log(resultStr)
       
     } catch (error) {
+      console.log(error)
       ctx.logger.error(error);
     }
-    ctx.body = resultStr;
+    ctx.body = new Resp().ok(resultStr);
 
   }
   

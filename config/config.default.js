@@ -22,9 +22,9 @@ module.exports = appInfo => {
   const userConfig = {
     // myAppName: 'egg',
     baiduOcr: {
-      APP_ID: "",
-      API_KEY: "",
-      SECRET_KEY: ""
+      APP_ID: "1",
+      API_KEY: "2",
+      SECRET_KEY: "3"
     }
   };
 
