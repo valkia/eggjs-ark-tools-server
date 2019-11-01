@@ -15,12 +15,12 @@ class HomeController extends Controller {
     console.log("testUploadImg")
 
     // 设置APPID/AK/SK
-    var APP_ID = "";
-    var API_KEY = "";
-    var SECRET_KEY = "";
-    var fs = require('fs');
+    let APP_ID = this.config.baiduOcr.APP_ID;
+    let API_KEY = this.config.baiduOcr.API_KEY;
+    let SECRET_KEY = this.config.baiduOcr.SECRET_KEY;
+    let fs = require('fs');
     // 新建一个对象，建议只保存一个对象调用服务接口
-    var client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
+    let client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
 
 
     // 设置request库的一些参数，例如代理服务地址，超时时间等
