@@ -7,7 +7,24 @@ let Resp = require('../model/Resp.js');
 class HomeController extends Controller {
   async index() {
     const { ctx } = this;
+    ctx.service.ark.test();
     ctx.body = 'hi, egg';
+  }
+
+  async upload(){
+
+  }
+
+  async getTagsAval(){
+
+  }
+
+  async getChangeList(){
+
+  }
+
+  async postChange(){
+
   }
 
   async testUploadImg() {
