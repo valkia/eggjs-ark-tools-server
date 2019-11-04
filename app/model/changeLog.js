@@ -1,10 +1,8 @@
-/* jshint indent: 2 */
-
 module.exports = app => {
 
   const { STRING, INTEGER, DATE ,TIMESTAMP} = app.Sequelize;
 
-  const changeLog = app.model.define('change_logs', {
+  const ChangeLog = app.model.define('change_logs', {
     
     username: {
       type: STRING(80),
@@ -27,5 +25,9 @@ module.exports = app => {
       allowNull: true
     }
   });
-  return changeLog;
+
+
+
+
+  return ChangeLog;
 };

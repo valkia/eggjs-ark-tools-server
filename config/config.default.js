@@ -64,6 +64,11 @@ module.exports = appInfo => {
       ],
       maxFileSize: 2 * 1024 * 1024 * 1024,
     },
+    security: {
+      csrf: {
+        enable: false//先关闭，以后有时间再解决
+      },
+    },
   };
 };
 

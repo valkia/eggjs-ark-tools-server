@@ -17,15 +17,21 @@ class HomeController extends Controller {
   }
 
   async getTagsAval(){
-
+    const { ctx } = this;
+    ctx.body = new Resp().ok(await this.service.ark.getTagsAval());
   }
 
   async getChangeList(){
-
+    console.log("getChangeList");
+    const { ctx } = this;
+    const { keyword, pageIndex,pageSize } = ctx.request.body;
+    console.log(keyword, pageIndex,pageSize);
+    ctx.body = new Resp().ok(await this.service.ark.getChangeList(keyword,pageIndex,pageSize));
   }
 
   async postChange(){
-
+    const { ctx } = this;
+    ctx.body = new Resp().ok(await this.service.ark.postChange(ctx.request.body));
   }
 
   async testUploadImg() {

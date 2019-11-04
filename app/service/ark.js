@@ -2,13 +2,14 @@ const Service = require('egg').Service;
 
 let AipOcrClient = require("baidu-aip-sdk").ocr;
 let HttpClient = require("baidu-aip-sdk").HttpClient;
-
+const tagsAval = require('../data/tagsAval.json');
 class ArkService extends Service {
     async test() {
-        console.log("test service")
-        return {
-            key: 666
-        };
+        const ctx = this.ctx;
+        const user = await ctx.model.User.create({ name:'test', age:77 });
+        console.log(await ctx.model.User.findAll());
+        ctx.status = 201;
+        ctx.body = user;
     }
 
     async upload() {
@@ -59,15 +60,67 @@ class ArkService extends Service {
     }
 
     async getTagsAval() {
+        return tagsAval;
+    }
+
+    async getChangeList(keyword, pageIndex, pageSize) {
+
+        if (keyword != null && keyword != "") {
+            keyword = keyword + "";
+            let keywords = keyword.split(" ");
+            console.log(keywords.length);
+            return []
+        } else {
+            let limit = pageSize;
+            let offset = (pageIndex - 1) * pageSize;
+            let query = { "limit": limit, "offset": offset };
+            return await this.ctx.model.ChangeLog.findAll(query);
+        }
 
     }
 
-    async getChangeList() {
+    async postChange(data) {
+        const ctx = this.ctx;
+        let id = data["id"];
+        let remark = data["remark"];
+        let server = data["server"];
+        let clueList = data["clueList"];
+        console.log(data);
 
-    }
+        const changeLog =await  this.ctx.model.ChangeLog.create({"username": id, "server": server, "remark": remark, "need":"3,5,6","have":"1,3"})
+        console.log(changeLog.id);
 
-    async postChange() {
-
+        let needList = clueList["need"];
+        let needStr = "";
+        console.log(needList);
+        for(let need of needList){
+            if (!!need["showFlag"]) {
+               // const user = await ctx.model.User.create({ name:'test', age:77 });
+                const changeNumber =await ctx.model.ChangeNumber.create({ mold: "need", number: need["name"] ,change_id:changeLog.id});
+                if (needStr != "") {
+                    needStr = needStr + "," + need["name"]
+                } else {
+                    needStr = need["name"]
+                }
+            }
+        };
+        console.log(needStr);
+        let haveList = clueList["have"];
+		let	haveStr = "";
+        for(let have of haveList){
+            if (!!have["showFlag"]) {
+                const changeNumber =await  this.ctx.model.ChangeNumber.create({ mold: "have", number: have["name"] ,change_id:changeLog.id});
+					if (haveStr != "") {
+						haveStr = haveStr + "," + have["name"]
+					} else {
+						haveStr = have["name"]
+					}
+				
+			}
+        };
+        console.log(haveStr);
+        changeLog.update({need:needStr,have:haveStr});
+        return changeLog;
     }
 }
 
