@@ -4,7 +4,7 @@ module.exports = app => {
 
   const { STRING, INTEGER, DATE } = app.Sequelize;
 
-  const changeNumber = app.model.define('change_numbers', {
+  const ChangeNumber = app.model.define('change_numbers', {
    
     mold: {
       type: STRING(10),
@@ -19,5 +19,5 @@ module.exports = app => {
       allowNull: true
     }
   });
-  return changeNumber;
+  return ChangeNumber;
 };
