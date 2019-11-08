@@ -133,6 +133,17 @@ class ArkService extends Service {
         changeLog.update({ need: needStr, have: haveStr });
         return changeLog;
     }
+    //活动本日期
+    async getDungeonDate() {
+        let result = [{ code: '66', list: [true, false, false, true, true, true, false] }, { code: '77', list: [true, false, false, true, true, true, false] }];
+        return result;
+    }
+
+    //获得概率up角色
+    async getChanceUp() {
+        let result = ["777","888"];//id
+        return result;
+    }
 }
 
 module.exports = ArkService;
