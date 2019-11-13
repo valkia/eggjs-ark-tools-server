@@ -1,7 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-let Resp = require('./resp.js');
+const Resp = require('./resp.js');
 class HomeController extends Controller {
   async index() {
     const { ctx } = this;
@@ -9,40 +9,40 @@ class HomeController extends Controller {
     ctx.body = 'hi, egg';
   }
 
-  async upload(){
+  async upload() {
     const { ctx } = this;
-    console.log("upload")
-    let res = await this.service.ark.upload()
+    console.log('upload');
+    const res = await this.service.ark.upload();
     ctx.body = new Resp().ok(res);
   }
 
-  async getTagsAval(){
+  async getTagsAval() {
     const { ctx } = this;
     ctx.body = new Resp().ok(await this.service.ark.getTagsAval());
   }
 
-  async getChangeList(){
-    console.log("getChangeList");
+  async getChangeList() {
+    console.log('getChangeList');
     const { ctx } = this;
-    const { keyword, pageIndex,pageSize } = ctx.request.body;
-    console.log(keyword, pageIndex,pageSize);
-    ctx.body = new Resp().ok(await this.service.ark.getChangeList(keyword,pageIndex,pageSize));
+    const { keyword, pageIndex, pageSize } = ctx.request.body;
+    console.log(keyword, pageIndex, pageSize);
+    ctx.body = new Resp().ok(await this.service.ark.getChangeList(keyword, pageIndex, pageSize));
   }
 
-  async postChange(){
+  async postChange() {
     const { ctx } = this;
     ctx.body = new Resp().ok(await this.service.ark.postChange(ctx.request.body));
   }
 
   async testUploadImg() {
     const { ctx } = this;
-    console.log("testUploadImg")
+    console.log('testUploadImg');
 
-    
+
     ctx.body = new Resp().ok(this.service.ark.upload());
 
   }
-  
+
 }
 
 module.exports = HomeController;

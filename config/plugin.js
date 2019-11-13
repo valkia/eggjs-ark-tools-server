@@ -7,7 +7,7 @@
 //   //   enable: true,
 //   // }
 // };
-//orm
+// orm
 exports.sequelize = {
   enable: true,
   package: 'egg-sequelize',
