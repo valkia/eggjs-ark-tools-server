@@ -43,6 +43,22 @@ class HomeController extends Controller {
 
   }
 
+  async postBuddy(){
+    const { ctx } = this;
+    console.log('postBuddy');
+
+
+    ctx.body = new Resp().ok(await this.service.ark.postBuddy(ctx.request.body));
+  }
+
+  async getBuddyList(){
+    const { ctx } = this;
+    console.log('getBuddyList');
+
+    const { keyword, pageIndex, pageSize } = ctx.request.body;
+    ctx.body = new Resp().ok(await this.service.ark.getBuddyList(keyword, pageIndex, pageSize));
+  }
+
 }
 
 module.exports = HomeController;

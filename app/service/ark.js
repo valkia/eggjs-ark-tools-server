@@ -10,7 +10,7 @@ class ArkService extends Service {
     const user = await ctx.model.User.create({ name: 'test', age: 77 });
     console.log(await ctx.model.User.findAll());
     console.log(await ctx.model.query('SELECT * FROM user where id = ?',
-      { replacements: [ 'active' ], type: this.app.Sequelize.QueryTypes.SELECT }));
+      { replacements: ['active'], type: this.app.Sequelize.QueryTypes.SELECT }));
     ctx.status = 201;
     ctx.body = user;
   }
@@ -32,7 +32,7 @@ class ArkService extends Service {
     // 也可以设置拦截每次请求（设置拦截后，调用的setRequestOptions设置的参数将不生效）,
     // 可以按需修改request参数（无论是否修改，必须返回函数调用参数）
     // request参数请参考 https://github.com/request/request#requestoptions-callback
-    HttpClient.setRequestInterceptor(function(requestOptions) {
+    HttpClient.setRequestInterceptor(function (requestOptions) {
       // 查看参数
       // console.log(requestOptions)
       // 修改参数
@@ -40,25 +40,26 @@ class ArkService extends Service {
       // 返回参数
       return requestOptions;
     });
-
-    const image = fs.readFileSync('C:\\Users\\dujiahao\\Desktop\\come.jpg').toString('base64');
-    const ALLOWED_TAGS = [ '新手', '高级资深干员', '资深干员', '远程位', '近战位', '男性干员', '女性干员', '先锋干员', '狙击干员', '医疗干员', '术师干员', '近卫干员', '重装干员', '辅助干员', '特种干员', '治疗', '支援', '输出', '群攻', '减速', '生存', '防护', '削弱', '位移', '控场', '爆发', '召唤', '快速复活', '费用回复' ];
+console.log(this.ctx.request.files);
+    const file = this.ctx.request.files[0];
+    
+    //const image = fs.readFileSync('C:\\Users\\dujiahao\\Desktop\\come.jpg').toString('base64');
+    const ALLOWED_TAGS = ['新手', '高级资深干员', '资深干员', '远程位', '近战位', '男性干员', '女性干员', '先锋干员', '狙击干员', '医疗干员', '术师干员', '近卫干员', '重装干员', '辅助干员', '特种干员', '治疗', '支援', '输出', '群攻', '减速', '生存', '防护', '削弱', '位移', '控场', '爆发', '召唤', '快速复活', '费用回复'];
     const resultStr = [];
     // 调用通用文字识别（高精度版）
     try {
-      const res = await client.accurateBasic(image);
+      const res = await client.accurateBasic(fs.readFileSync(file.filepath).toString('base64'));
+      
       res.words_result.forEach(item => {
         if (ALLOWED_TAGS.indexOf(item.words) !== -1) {
           resultStr.push(item.words);
         }
       });
-      console.log(resultStr);
 
     } catch (error) {
       console.log(error);
       // ctx.logger.error(error);
     }
-    console.log(resultStr);
     return resultStr;
   }
 
@@ -77,10 +78,10 @@ class ArkService extends Service {
       // await ctx.model.query('SELECT * FROM user where id = ?',
       // { replacements: ['active'], type: this.app.Sequelize.QueryTypes.SELECT});
 
-      const sql_str = " SELECT * from change_logs where id in ( select change_id from change_numbers n where n.mold='have' and n.number in (?) GROUP BY n.change_id having  count(*)= ? ) order by created_at desc limit ? , ? ";
+      const sql_str = " SELECT * from change_logs where id in ( select change_id from change_numbers n where n.mold='have' and n.number in (?) GROUP BY n.change_id having  count(*)= ? ) order by createdAt desc limit ? , ? ";
       let result = [];
       result = await this.ctx.model.query(sql_str,
-        { replacements: [ keyword, keywords.length, pageIndex - 1, pageSize ], type: this.app.Sequelize.QueryTypes.SELECT });
+        { replacements: [keyword, keywords.length, pageIndex - 1, pageSize], type: this.app.Sequelize.QueryTypes.SELECT });
       return result;
     }
     const limit = pageSize;
@@ -152,10 +153,13 @@ class ArkService extends Service {
   async getBuddyList(keyword, pageIndex, pageSize) {
 
     if (keyword !== null && keyword !== '') {
+      console.log(keyword);
       keyword = keyword + '';
       const limit = pageSize;
       const offset = (pageIndex - 1) * pageSize;
-      const query = { limit, offset, server: keyword };
+      const query = { limit, offset, where: {
+        'server': keyword 
+    }};
       return await this.ctx.model.BuddyLog.findAll(query);
     }
     const limit = pageSize;
@@ -168,13 +172,13 @@ class ArkService extends Service {
 
   // 活动本日期
   async getDungeonDate() {
-    const result = [{ code: '66', list: [ true, false, false, true, true, true, false ] }, { code: '77', list: [ true, false, false, true, true, true, false ] }];
+    const result = [{ code: '66', list: [true, false, false, true, true, true, false] }, { code: '77', list: [true, false, false, true, true, true, false] }];
     return result;
   }
 
   // 获得概率up角色
   async getChanceUp() {
-    const result = [ '777', '888' ];// id
+    const result = ['777', '888'];// id
     return result;
   }
 }
