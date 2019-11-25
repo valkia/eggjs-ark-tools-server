@@ -58,11 +58,10 @@ describe('test/app/controller/home.test.js', () => {
       .expect(200);
   });
 
-  it('should status 200 and get the request body', async () => {
-    // 模拟 CSRF token，下文会详细说明
+  it('postBuddy should status 200 and get the request body', async () => {
     app.mockCsrf();
-    const username = 'username' + parseInt(Math.random()*100);
-    const remark = 'remark' + parseInt(Math.random()*100);
+    const username = 'username' + parseInt(Math.random() * 100);
+    const remark = 'remark' + parseInt(Math.random() * 100);
     const server = '官服';
     const res = await app.httpRequest()
       .post('/ark/postBuddy')
@@ -73,7 +72,79 @@ describe('test/app/controller/home.test.js', () => {
         server: server
       })
       .expect(200);
-      console.log(res.text);
+    console.log(res.text);
+    assert(JSON.parse(res.text).data.username == username);
+    assert(JSON.parse(res.text).data.remark == remark);
+    assert(JSON.parse(res.text).data.server == server);
+  });
+  it('postChange should status 200 and get the request body', async () => {
+    app.mockCsrf();
+    const username = 'username' + parseInt(Math.random() * 100);
+    const remark = 'remark' + parseInt(Math.random() * 100);
+    const server = '官服';
+    let clueList = {};
+    let need = [];
+    let have = [];
+    let needStr = "";
+    let haveStr = "";
+    for (let i = 0; i < 7; i++) {
+      let needBoolean = Math.random() >= 0.5;
+      need.push({ name: (i + 1)+"", showFlag: needBoolean });
+      have.push({ name: (i + 1)+"", showFlag: !needBoolean });
+      if (needBoolean) {
+        if (needStr !== '') {
+          needStr = needStr + ',' + (i + 1);
+        } else {
+          needStr = (i + 1);
+        }
+      }
+      if (!needBoolean) {
+        if (haveStr !== '') {
+          haveStr = haveStr + ',' + (i + 1);
+        } else {
+          haveStr = (i + 1);
+        }
+      }
+    }
+
+
+    clueList.need = need;
+    clueList.have = have;
+    const res = await app.httpRequest()
+      .post('/ark/postChange')
+      .type('json')
+      .send({
+        id: username,
+        remark: remark,
+        server: server,
+        clueList: clueList
+      })
+      .expect(200);
+    console.log(res.text);
+    assert(JSON.parse(res.text).data.username == username);
+    assert(JSON.parse(res.text).data.remark == remark);
+    assert(JSON.parse(res.text).data.server == server);
+    assert(JSON.parse(res.text).data.have == haveStr);
+    assert(JSON.parse(res.text).data.need == needStr);
+  });
+
+  //https://i.loli.net/2019/11/25/ZQaymdSHgfiEPvN.jpg
+
+  it('upload should status 200 and get the request body', async () => {
+    app.mockCsrf();
+    const path = require('path');
+    const fs = require('fs');
+    //const img = require('./come.jpg');
+    const file = fs.readFileSync(app.config.baseDir+"\\test\\app\\controller\\come.jpg");
+    //console.log(img);
+    const ctx = app.mockContext();
+    ctx.request.files = [];
+    ctx.request.files[0] = file;
+    const res = await app.httpRequest()
+      .post('/ark/upload')
+      .type('json')
+      .expect(200);
+    console.log(res.text);
     assert(JSON.parse(res.text).data.username == username);
     assert(JSON.parse(res.text).data.remark == remark);
     assert(JSON.parse(res.text).data.server == server);

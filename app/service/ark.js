@@ -40,16 +40,16 @@ class ArkService extends Service {
       // 返回参数
       return requestOptions;
     });
-console.log(this.ctx.request.files);
+    console.log(this.ctx.request.files);
     const file = this.ctx.request.files[0];
-    
+
     //const image = fs.readFileSync('C:\\Users\\dujiahao\\Desktop\\come.jpg').toString('base64');
     const ALLOWED_TAGS = ['新手', '高级资深干员', '资深干员', '远程位', '近战位', '男性干员', '女性干员', '先锋干员', '狙击干员', '医疗干员', '术师干员', '近卫干员', '重装干员', '辅助干员', '特种干员', '治疗', '支援', '输出', '群攻', '减速', '生存', '防护', '削弱', '位移', '控场', '爆发', '召唤', '快速复活', '费用回复'];
     const resultStr = [];
     // 调用通用文字识别（高精度版）
     try {
       const res = await client.accurateBasic(fs.readFileSync(file.filepath).toString('base64'));
-      
+
       res.words_result.forEach(item => {
         if (ALLOWED_TAGS.indexOf(item.words) !== -1) {
           resultStr.push(item.words);
@@ -99,8 +99,8 @@ console.log(this.ctx.request.files);
     const server = data.server;
     const clueList = data.clueList;
     console.log(data);
-
-    const changeLog = await this.ctx.model.ChangeLog.create({ username: id, server, remark, need: '3,5,6', have: '1,3' });
+    this.ctx.logger.info('getChangeList clueList: %j', clueList);
+    let changeLog = await this.ctx.model.ChangeLog.create({ username: id, server, remark, need: '3,5,6', have: '1,3' });
     console.log(changeLog.id);
 
     const needList = clueList.need;
@@ -118,6 +118,7 @@ console.log(this.ctx.request.files);
         }
       }
     }
+
     console.log(needStr);
     const haveList = clueList.have;
     let haveStr = '';
@@ -146,7 +147,7 @@ console.log(this.ctx.request.files);
     console.log(data);
 
     const buddyLog = await this.ctx.model.BuddyLog.create({ username: id, server, remark });
-console.log(buddyLog);
+    console.log(buddyLog);
     return buddyLog;
   }
   // 这里keyword就是服务器名，暂时不查询好友姓名
@@ -157,9 +158,11 @@ console.log(buddyLog);
       keyword = keyword + '';
       const limit = pageSize;
       const offset = (pageIndex - 1) * pageSize;
-      const query = { limit, offset, where: {
-        'server': keyword 
-    }};
+      const query = {
+        limit, offset, where: {
+          'server': keyword
+        }
+      };
       return await this.ctx.model.BuddyLog.findAll(query);
     }
     const limit = pageSize;
