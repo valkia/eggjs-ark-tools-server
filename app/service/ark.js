@@ -146,7 +146,7 @@ console.log(this.ctx.request.files);
     console.log(data);
 
     const buddyLog = await this.ctx.model.BuddyLog.create({ username: id, server, remark });
-
+console.log(buddyLog);
     return buddyLog;
   }
   // 这里keyword就是服务器名，暂时不查询好友姓名
