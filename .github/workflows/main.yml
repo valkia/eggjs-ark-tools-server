@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: 12.x
 
     steps:
     - uses: actions/checkout@v1
@@ -23,7 +23,7 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm install --production
-        npm test
+        npm run test-local
         npm stop
         npm start
       env:
