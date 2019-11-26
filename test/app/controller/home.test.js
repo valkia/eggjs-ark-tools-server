@@ -130,23 +130,23 @@ describe('test/app/controller/home.test.js', () => {
 
   //https://i.loli.net/2019/11/25/ZQaymdSHgfiEPvN.jpg
 
-  it('upload should status 200 and get the request body', async () => {
-    app.mockCsrf();
-    const path = require('path');
-    const fs = require('fs');
-    //const img = require('./come.jpg');
-    const file = fs.readFileSync(app.config.baseDir+"\\test\\app\\controller\\come.jpg");
-    //console.log(img);
-    const ctx = app.mockContext();
-    ctx.request.files = [];
-    ctx.request.files[0] = file;
-    const res = await app.httpRequest()
-      .post('/ark/upload')
-      .type('json')
-      .expect(200);
-    console.log(res.text);
-    assert(JSON.parse(res.text).data.username == username);
-    assert(JSON.parse(res.text).data.remark == remark);
-    assert(JSON.parse(res.text).data.server == server);
-  });
+  // it('upload should status 200 and get the request body', async () => {
+  //   app.mockCsrf();
+  //   const path = require('path');
+  //   const fs = require('fs');
+  //   //const img = require('./come.jpg');
+  //   const file = fs.readFileSync(app.config.baseDir+"\\test\\app\\controller\\come.jpg");
+  //   //console.log(img);
+  //   const ctx = app.mockContext();
+  //   ctx.request.files = [];
+  //   ctx.request.files[0] = file;
+  //   const res = await app.httpRequest()
+  //     .post('/ark/upload')
+  //     .type('json')
+  //     .expect(200);
+  //   console.log(res.text);
+  //   assert(JSON.parse(res.text).data.username == username);
+  //   assert(JSON.parse(res.text).data.remark == remark);
+  //   assert(JSON.parse(res.text).data.server == server);
+  // });
 });
