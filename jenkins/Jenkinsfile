@@ -16,7 +16,7 @@ pipeline {
         }
         stage('Test') { 
             steps {
-                sh 'chmod 777 -R /arknode/jenkins'
+                sh 'chmod 777 -R /jenkins'
                 sh './jenkins/scripts/test.sh' 
             }
         }
