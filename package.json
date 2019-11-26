@@ -9,7 +9,6 @@
   "dependencies": {
     "baidu-aip-sdk": "^2.4.4",
     "egg": "^2.15.1",
-    "egg-bin": "^4.11.0",
     "egg-scripts": "^2.11.0",
     "egg-sequelize": "^5.2.0",
     "mysql2": "^2.0.0"

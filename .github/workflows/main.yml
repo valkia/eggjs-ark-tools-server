@@ -23,7 +23,6 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm install --production
-        npm run test-local
         npm stop
         npm start
       env:
