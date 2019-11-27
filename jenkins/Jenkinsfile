@@ -16,8 +16,8 @@ pipeline {
         }
         stage('Test') { 
             steps {
-                sh 'rm -f config.default.js'
-                sh 'mv config.prod.js config.default.js'
+                sh 'rm -f ../config/config.default.js'
+                sh 'mv ../config/config.prod.js ../config/config.default.js'
                 sh 'chmod 777 -R jenkins'
                 sh './jenkins/scripts/test.sh' 
             }
