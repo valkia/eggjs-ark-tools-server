@@ -68,25 +68,37 @@ class ArkService extends Service {
   }
 
   async getChangeList(keyword, pageIndex, pageSize) {
-
+//3 5
     if (keyword !== null && keyword !== '') {
       keyword = keyword + '';
       const keywords = keyword.split(' ');
       console.log(keywords.length);
-
+      let keyStr = "";
+for(let i=0;i<keywords.length;i++){
+  if(i==0){
+    keyStr = keywords[i];
+  }
+  else{
+    keyStr =keyStr + ","+keywords[i];
+  }
+}
 
       // await ctx.model.query('SELECT * FROM user where id = ?',
       // { replacements: ['active'], type: this.app.Sequelize.QueryTypes.SELECT});
 
-      const sql_str = " SELECT * from change_logs where id in ( select change_id from change_numbers n where n.mold='have' and n.number in (?) GROUP BY n.change_id having  count(*)= ? ) order by createdAt desc limit ? , ? ";
+      const sql_str = " SELECT * from change_logs where id in ( select change_id from change_numbers n where n.mold='have' and n.number in ("+keyStr+") GROUP BY n.change_id having  count(*)= ? ) order by change_logs.created_at desc limit ? , ? ";
       let result = [];
       result = await this.ctx.model.query(sql_str,
-        { replacements: [keyword, keywords.length, pageIndex - 1, pageSize], type: this.app.Sequelize.QueryTypes.SELECT });
+        { replacements: [ keywords.length, pageIndex - 1, pageSize], type: this.app.Sequelize.QueryTypes.SELECT });
       return result;
     }
     const limit = pageSize;
     const offset = (pageIndex - 1) * pageSize;
-    const query = { limit, offset };
+    let order_by ='created_at';
+    let order = 'DESC'
+    const query = { limit, offset,order:[
+      [order_by,order.toUpperCase()]
+  ] };
     return await this.ctx.model.ChangeLog.findAll(query);
 
 
