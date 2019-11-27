@@ -86,7 +86,7 @@ for(let i=0;i<keywords.length;i++){
       // await ctx.model.query('SELECT * FROM user where id = ?',
       // { replacements: ['active'], type: this.app.Sequelize.QueryTypes.SELECT});
 
-      const sql_str = " SELECT * from change_logs where id in ( select change_id from change_numbers n where n.mold='have' and n.number in ("+keyStr+") GROUP BY n.change_id having  count(*)= ? ) order by change_logs.created_at desc limit ? , ? ";
+      const sql_str = " SELECT created_at as createdAt,updated_at as updatedAt ,id , username,server,remark,need,have from change_logs where id in ( select change_id from change_numbers n where n.mold='have' and n.number in ("+keyStr+") GROUP BY n.change_id having  count(*)= ? ) order by change_logs.created_at desc limit ? , ? ";
       let result = [];
       result = await this.ctx.model.query(sql_str,
         { replacements: [ keywords.length, pageIndex - 1, pageSize], type: this.app.Sequelize.QueryTypes.SELECT });
