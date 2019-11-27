@@ -16,6 +16,7 @@ pipeline {
         }
         stage('Test') { 
             steps {
+                sh 'pwd'
                 sh 'rm -f ../config/config.default.js'
                 sh 'mv ../config/config.prod.js ../config/config.default.js'
                 sh 'chmod 777 -R jenkins'
