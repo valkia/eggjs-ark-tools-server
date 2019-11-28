@@ -2,10 +2,12 @@
 
 const { app, mock, assert } = require('egg-mock/bootstrap');
 describe('test/app/controller/home.test.js', () => {
-
+  
   // Mocha 顺序
   before(() => console.log('before test'));
-  after(() => console.log('finish test'));
+  after(() => {
+    console.log(app.config.env);
+    console.log('finish test')});
   beforeEach(() => console.log('beforeEach'));
   afterEach(() => {
     console.log('afterEach');
